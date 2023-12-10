@@ -3,14 +3,38 @@ let computerSelection;
 let playerWins = 0;
 let comWins = 0;
 
-// resolveRound(playerSelection, computerSelection);
+const controls = document.querySelector("#controls");
+const result = document.querySelector("#result");
+const score = document.querySelector("#score");
+const buttons = document.querySelectorAll("button");
+
+score.textContent = `${playerWins}:${comWins}`;
+
+controls.addEventListener("click", (event) => {
+  let target = event.target;
+
+  switch(target.id) {
+    case "rock":
+      playerSelection = "rock";
+      break;
+    case "paper":
+      playerSelection = "paper";
+      break;
+    case "scissors":
+      playerSelection = "scissors";
+      break;
+  }
+
+  game();
+});
+
 game();
 
-function getPlayerChoice() {
-  let input = prompt("Rock Paper Scissors!:", "");
-  input = input.toLocaleLowerCase();
-  return input;
-}
+//function getPlayerChoice() {
+//  let input = prompt("Rock Paper Scissors!:", "");
+//  input = input.toLocaleLowerCase();
+//  return input;
+//}
 
 function getComputerChoice() {
   let roll = ["rock", "paper", "scissors"];
@@ -21,58 +45,77 @@ function getComputerChoice() {
 
 function resolveRound(player, computer) {
  if (player === "rock" && computer === "rock") {
-    alert("Rocks! It's a tie!");
-    replay();
+    result.textContent = "Rocks! It's a tie!";
   }
   else if (player === "rock" && computer === "paper") {
-    alert("You lose! Paper beats rock");
-    comWins++;
+    result.textContent = "You lose! Paper beats rock";
+    score.textContent = `${playerWins}:${++comWins}`;   
   }
   else if (player === "rock" && computer === "scissors") {
-    alert("You win! Rock beats scissors");
-    playerWins++;
+    result.textContent = "You win! Rock beats scissors";
+    score.textContent = `${++playerWins}:${comWins}`;
   }
   else if (player === "paper" && computer === "rock") {
-    alert("You win! Paper beats rock");
-    playerWins++;
+    result.textContent = "You win! Paper beats rock";
+    score.textContent = `${++playerWins}:${comWins}`;
   }
   else if (player === "paper" && computer === "paper") {
-    alert("Papers! It's a tie!");
-    replay();
+    result.textContent = "Papers! It's a tie!";
   }
   else if (player === "paper" && computer === "scissors") {
-    alert("You lose! Scissors beat paper");
-    comWins++;
+    result.textContent = "You lose! Scissors beat paper";
+    score.textContent = `${playerWins}:${++comWins}`; 
   }
   else if (player === "scissors" && computer === "rock") {
-    alert("You lose! Rock beats scissors");
-    comWins++;
+    result.textContent = "You lose! Rock beats scissors";
+    score.textContent = `${playerWins}:${++comWins}`; 
   }
   else if (player === "scissors" && computer === "paper") {
-    alert("You win! Scissors beat paper");
-    playerWins++;
+    result.textContent = "You win! Scissors beat paper";
+    score.textContent = `${++playerWins}:${comWins}`;
   }
   else if (player === "scissors" && computer === "scissors") {
-    alert("Scissors! It's a tie!");
-    replay();
+    result.textContent = "Scissors! It's a tie!";
   }
-}
-
-function replay() {
-  playerSelection = getPlayerChoice();
-  computerSelection = getComputerChoice();
-  resolveRound(playerSelection, computerSelection);
 }
 
 function game() {
-  for (let i = 1; i <= 5; i++) {
-    replay();
-    console.log(`Current score: Player ${playerWins} : ${comWins}`);
-  }
-  if (playerWins > comWins) {
-    console.log("You win!");
-  }
-  else {
-    console.log("You lose!");
+  computerSelection = getComputerChoice();
+  resolveRound(playerSelection, computerSelection);
+  if(playerWins === 5 || comWins === 5) {
+    for(let button of buttons) {
+      button.disabled = true;
+    }
+    if(playerSelection === 5) {
+      score.textContent += " You win! Click this text to start over!";
+    }
+    else if(comWins === 5) {
+      score.textContent += " You lose! Click this text to start over!";
+    }
+  
+  score.addEventListener("click", newGame);
   }
 }
+
+function newGame() {
+  playerWins = 0;
+  comWins = 0;
+  score.textContent = `${playerWins}:${comWins}`;
+  for(let button of buttons) {
+    button.disabled = false;
+  }
+  score.removeEventListener("click", newGame);
+}
+
+// function game() {
+//  for (let i = 1; i <= 5; i++) {
+//    replay();
+//    console.log(`Current score: Player ${playerWins} : ${comWins}`);
+//  }
+//  if (playerWins > comWins) {
+//   console.log("You win!");
+//  }
+//  else {
+//    console.log("You lose!");
+//  }
+//}
