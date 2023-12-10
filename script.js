@@ -10,6 +10,8 @@ const buttons = document.querySelectorAll("button");
 
 score.textContent = `${playerWins}:${comWins}`;
 
+addEventListener("contextmenu", (e) => e.preventDefault());
+
 controls.addEventListener("click", (event) => {
   let target = event.target;
 
@@ -86,7 +88,7 @@ function game() {
     for(let button of buttons) {
       button.disabled = true;
     }
-    if(playerSelection === 5) {
+    if(playerWins === 5) {
       score.textContent += " You win! Click this text to start over!";
     }
     else if(comWins === 5) {
